@@ -1,4 +1,10 @@
-use backend::scraper::cambridge::{self, statics::DEF_SELECTOR};
+mod constants;
+use constants::TESTING_DOCUMENT;
+
+use backend::dict::{
+    cambridge::{self, statics::DEF_BLOCK_SELECTOR},
+    model::Defenition,
+};
 use scraper::Html;
 
 #[tokio::test]
@@ -11,37 +17,21 @@ async fn defs_selector_works() {
         .unwrap();
 
     let document = Html::parse_document(&doc);
-    let mut defs = document.select(&DEF_SELECTOR);
+    let mut defs = document.select(&DEF_BLOCK_SELECTOR);
 
     assert!(defs.next().is_some());
 }
 
 #[test]
 fn parser_works() {
-    let document = r#"
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
-    </head>
-    <body>
-      <div class="def">first</div>
-      <div class="def">second</div>
-      <div class="def">third</div>
-    </body>
-    </html>
-    "#;
+    let defs = cambridge::parser::parse(TESTING_DOCUMENT);
 
-    let defs = cambridge::parser::parse(document);
+    dbg!(&defs["noun"][0]);
 
+    assert_eq!(defs.len(), 1);
+    assert_eq!(defs["noun"].len(), 3);
     assert_eq!(
-        defs,
-        vec![
-            String::from("first"),
-            String::from("second"),
-            String::from("third")
-        ]
+        defs["noun"][0],
+        Defenition::new("a piece of equipment that you speak into to make your voice louder, or to record your voice or other sounds".to_string(), vec!["The interviewer asked her to speak into/use the microphone.".to_string(), "My laptop has a built-in microphone.".to_string()])
     );
 }

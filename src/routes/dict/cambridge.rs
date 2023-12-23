@@ -2,7 +2,7 @@ use actix_web::{get, web, HttpResponse};
 use serde_json::json;
 
 use crate::{
-    scraper::{cambridge::CambridgeScraper, traits::Scrape},
+    dict::{cambridge::CambridgeScraper, traits::Scrape},
     server::error::{AppError, AppResult},
 };
 

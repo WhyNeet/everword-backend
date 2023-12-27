@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use scraper::Html;
+use scraper::{ElementRef, Html};
 
 use crate::dict::model::Defenition;
 
@@ -23,7 +23,20 @@ pub fn parse(doc: &str) -> HashMap<String, Vec<Defenition>> {
                 .unwrap_or(text);
 
             let mut part_of_speech = def.select(&DEF_PART_OF_SPEECH_SELECTOR);
-            let part_of_speech = part_of_speech.next().unwrap().text().collect::<String>();
+            let part_of_speech = part_of_speech.next().or_else(|| {
+                let parent = def.parent().unwrap();
+                let header = parent.prev_sibling().unwrap();
+                let header = ElementRef::wrap(header).unwrap();
+                let part_of_speech = header.select(&DEF_PART_OF_SPEECH_SELECTOR).next();
+
+                part_of_speech
+            });
+
+            if part_of_speech.is_none() {
+                return acc;
+            }
+
+            let part_of_speech = part_of_speech.unwrap().text().collect::<String>();
 
             let examples = def.select(&DEF_EXAMPLES_SELECTOR);
             let examples = examples

@@ -26,7 +26,7 @@ async fn defs_selector_works() {
 fn parser_works() {
     let defs = cambridge::parser::parse(TESTING_DOCUMENT);
 
-    dbg!(&defs["noun"][0]);
+    dbg!(&defs);
 
     assert_eq!(defs.len(), 1);
     assert_eq!(defs["noun"].len(), 3);

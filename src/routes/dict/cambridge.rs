@@ -11,5 +11,5 @@ pub async fn word(path: web::Path<String>) -> AppResult<HttpResponse> {
         .await
         .or(Err(AppError::Internal))?;
 
-    Ok(HttpResponse::Ok().json(json!({ "defentions": defs })))
+    Ok(HttpResponse::Ok().json(json!({ "defenitions": defs })))
 }

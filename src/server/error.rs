@@ -1,5 +1,4 @@
-use actix_web::{HttpResponse, ResponseError};
-use reqwest::StatusCode;
+use actix_web::{http::StatusCode, HttpResponse, ResponseError};
 use serde_json::json;
 use thiserror::Error;
 
@@ -10,7 +9,7 @@ pub enum AppError {
 }
 
 impl ResponseError for AppError {
-    fn status_code(&self) -> reqwest::StatusCode {
+    fn status_code(&self) -> StatusCode {
         match *self {
             AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
         }

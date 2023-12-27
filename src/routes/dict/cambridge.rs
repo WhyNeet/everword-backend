@@ -1,10 +1,9 @@
 use actix_web::{get, web, HttpResponse};
 use serde_json::json;
 
-use crate::{
-    dict::{cambridge::CambridgeScraper, traits::Scrape},
-    server::error::{AppError, AppResult},
-};
+use crate::server::error::{AppError, AppResult};
+
+use everword_lib::dict::{cambridge::CambridgeScraper, traits::Scrape};
 
 #[get("/{word}")]
 pub async fn word(path: web::Path<String>) -> AppResult<HttpResponse> {

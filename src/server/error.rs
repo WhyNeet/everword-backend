@@ -6,12 +6,16 @@ use thiserror::Error;
 pub enum AppError {
     #[error("An internal error occured.")]
     Internal,
+
+    #[error("Wrong provider name.")]
+    WrongProviderName,
 }
 
 impl ResponseError for AppError {
     fn status_code(&self) -> StatusCode {
         match *self {
             AppError::Internal => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::WrongProviderName => StatusCode::BAD_REQUEST,
         }
     }
 

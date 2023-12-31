@@ -1,11 +1,7 @@
 use actix_web::web;
 
-use super::{cambridge::word, discover::discover};
+use super::{discover::discover, provider::word};
 
 pub fn configure(cfg: &mut web::ServiceConfig) {
-    cfg.service(
-        web::scope("/providers")
-            .service(discover)
-            .service(web::scope("/cambridge").service(word)),
-    );
+    cfg.service(web::scope("/providers").service(discover).service(word));
 }

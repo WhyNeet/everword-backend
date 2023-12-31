@@ -1,5 +1,5 @@
 mod config;
-mod dict;
 mod healthcheck;
+mod providers;
 
 pub use config::*;
